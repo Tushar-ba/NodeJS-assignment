@@ -1,6 +1,7 @@
 import User from '../models/userModel.js'
 import generateToken from '../utils/generateToken.js'
 import nodemailer from 'nodemailer'
+import sendEmail from '../utils/sendEmail.js'
 
 
 const registerUser = async (req, res) => {
@@ -82,6 +83,58 @@ const getUserBalance = async (req, res) => {
   }
 }
 
+const transferBalance = async (req, res) => {
+  const { recipientEmail, amount } = req.body
 
+  try {
+    const sender = await User.findById(req.user._id)
+    const recipient = await User.findOne({ email: recipientEmail })
 
-export { registerUser,loginUser,getUserBalance }
+    if (!recipient) {
+      await sendEmail({
+        to: sender.email,
+        subject: 'Transfer Failed',
+        text: `Transfer of ${amount} to ${recipientEmail} failed. Recipient not found.`
+      })
+      return res.status(404).json({ message: 'Recipient not found' })
+    }
+
+    if (sender.balance < amount) {
+      await sendEmail({
+        to: sender.email,
+        subject: 'Transfer Failed',
+        text: `Transfer of ${amount} to ${recipientEmail} failed. Insufficient balance.`
+      })
+      return res.status(400).json({ message: 'Insufficient balance' })
+    }
+
+    sender.balance -= amount
+    recipient.balance += amount
+
+    await sender.save()
+    await recipient.save()
+
+    await sendEmail({
+      to: sender.email,
+      subject: 'Transfer Successful',
+      text: `You have successfully transferred ${amount} to ${recipientEmail}.`
+    })
+
+    await sendEmail({
+      to: recipient.email,
+      subject: 'Funds Received',
+      text: `You have received ${amount} from ${sender.email}.`
+    })
+
+    res.status(200).json({ message: 'Transfer successful' })
+  } catch (error) {
+    await sendEmail({
+      to: sender.email,
+      subject: 'Transfer Failed',
+      text: `Transfer of ${amount} to ${recipientEmail} failed. Error: ${error.message}`
+    })
+    res.status(500).json({ message: error.message })
+  }
+}
+
+export { registerUser,loginUser,getUserBalance, transferBalance }
