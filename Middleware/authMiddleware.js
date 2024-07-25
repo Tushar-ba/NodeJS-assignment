@@ -1,8 +1,5 @@
 import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
 import User from '../models/userModel.js'
-
-dotenv.config()
 
 const protect = async (req, res, next) => {
   let token
@@ -18,6 +15,7 @@ const protect = async (req, res, next) => {
       req.user = await User.findById(decoded.id).select('-password')
       next()
     } catch (error) {
+      console.error(error)
       res.status(401).json({ message: 'Not authorized, token failed' })
     }
   }

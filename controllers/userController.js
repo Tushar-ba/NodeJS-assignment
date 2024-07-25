@@ -29,7 +29,7 @@ const registerUser = async (req, res) => {
       from: process.env.EMAIL_USER,
       to: user.email,
       subject: 'Email Verification',
-      text: `Please verify your email by clicking the following link: ${process.env.BASE_URL}/verify/${generateToken(user._id)}`
+      text: `Welcome you have successfully created an account `
     }
 
     await transporter.sendMail(mailOptions)
@@ -68,4 +68,20 @@ const loginUser = async (req,res)=>{
   }
 }
 
-export { registerUser,loginUser }
+const getUserBalance = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id)
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    res.status(200).json({ balance: user.balance })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+
+
+export { registerUser,loginUser,getUserBalance }
