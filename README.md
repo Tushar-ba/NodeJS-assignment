@@ -12,3 +12,13 @@ Node Wallet
 - https://nodejs-assignment-tushar.onrender.com/api/users/getUserTransaction (to get logged in user balance)
 
 Post man https://documenter.getpostman.com/view/36461517/2sA3kaCyfL
+
+
+to run locally create .env file in root directory and add these fields 
+PORT = 5000
+MONGO_URI="Your mongo atlas uri"
+EMAIL_USER="mail id from which you have to send the email"
+EMAIL_PASS= "app code of the mail id"
+BASE_URL=http://localhost:5000
+JWT_SECRET=" your secret code"
+
