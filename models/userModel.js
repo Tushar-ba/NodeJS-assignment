@@ -24,8 +24,15 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       required: true,
       default: false
-    }
+    },
+    transactions:[
+      {
+      type:mongoose.Schema.Types.ObjectId,
+      ref:'Transaction',
+    },
+  ],
   },
+  
   {
     timestamps: true
   }
