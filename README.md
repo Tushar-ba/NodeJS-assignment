@@ -11,4 +11,4 @@ Node Wallet
 - https://nodejs-assignment-tushar.onrender.com/api/users/registerAdmin  (for admin registration)
 - https://nodejs-assignment-tushar.onrender.com/api/users/getUserTransaction (to get logged in user balance)
 
-Post man workspace  live link https://web.postman.co/workspace/Testing~56dcef0b-5005-430d-b79a-4f9f022c011a/collection/36461517-75ee1e21-d53f-4d58-ae18-a4878d1b0be4
+Post man https://documenter.getpostman.com/view/36461517/2sA3kaCyfL
